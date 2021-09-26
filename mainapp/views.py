@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import os, json
+from mainapp import models
 
 
 dir = os.path.dirname(__file__)
@@ -13,7 +14,9 @@ def products(request):
     file_path = os.path.join(dir, 'fixtures/fixtures.json')
     context = {
         "title": "geekshop",
-        "products": json.load(open(file_path, encoding='utf-8'))
+        "categorys": models.ProductsCategory.objects.all(),
+        "products": models.Products.objects.all()
+
     }
 
     return render(request, 'mainapp/products.html', context)

@@ -10,6 +10,7 @@ class ProductsCategory(models.Model):
     def __str__(self):
         return self.name
 
+
 class Products(models.Model):
     category = models.ForeignKey(ProductsCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
