@@ -14,7 +14,7 @@ def login(request):
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
 
-            if form.is_active:
+            if user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
         else:
