@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 def login(request):
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
+
         if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
@@ -19,10 +20,10 @@ def login(request):
             if user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
-        else:
-            print(form.errors)
+
     else:
         form = UserLoginForm()
+
     context = {
         "title": "Geekshop - Autorisation",
         'form': form
@@ -33,14 +34,15 @@ def login(request):
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(data=request.POST)
+
         if form.is_valid():
             form.save()
-            messages.success(request, 'YOU success registered ')
+            messages.success(request, 'You success registered !!!')
             return HttpResponseRedirect(reverse('users:login'))
-        else:
-            print(form.errors)
+
     else:
-        form = UserRegisterForm(data=request.POST)
+        form = UserRegisterForm()
+
     context = {
         'title': "Geekshop - Registration",
         'form': form
@@ -52,15 +54,23 @@ def register(request):
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+
         if form.is_valid():
             form.save()
+            messages.success(request, 'You success logged in !!!')
             return HttpResponseRedirect(reverse('users:profile'))
+
         else:
-            print(form.errors)
+            messages.error(request, 'Profile is not save !')
+
+    baskets = Basket.objects.filter(user=request.user)
+    total_sum = sum(basket.sum() for basket in baskets)
+
     context = {
         'title': 'Geekshop - profile',
         'form': UserProfileForm(instance=request.user),
-        'baskets': Basket.objects.filter(user=request.user)
+        'baskets': baskets,
+        'total_sum':total_sum,
     }
     return render(request, 'users/profile.html', context)
 
