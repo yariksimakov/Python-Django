@@ -24,11 +24,11 @@ def login(request):
     else:
         form = UserLoginForm()
 
-    context = {
+    content = {
         "title": "Geekshop - Autorisation",
         'form': form
     }
-    return render(request, 'users/login.html', context)
+    return render(request, 'users/login.html', content)
 
 
 def register(request):
@@ -43,11 +43,11 @@ def register(request):
     else:
         form = UserRegisterForm()
 
-    context = {
+    content = {
         'title': "Geekshop - Registration",
         'form': form
     }
-    return render(request, 'users/register.html', context)
+    return render(request, 'users/register.html', content)
 
 
 @login_required
@@ -64,15 +64,13 @@ def profile(request):
             messages.error(request, 'Profile is not save !')
 
     baskets = Basket.objects.filter(user=request.user)
-    total_sum = sum(basket.sum() for basket in baskets)
 
-    context = {
+    content = {
         'title': 'Geekshop - profile',
         'form': UserProfileForm(instance=request.user),
         'baskets': baskets,
-        'total_sum':total_sum,
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile.html', content)
 
 
 def logout(request):
