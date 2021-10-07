@@ -52,8 +52,7 @@
                             <form action="{% url 'admins:admins_user_delete' user.id %}" method="post">
                                 {% csrf_token %}
 
-{#                                Не работает #}
-                                {% if user.is_active != False %}
+                                {% if object.is_active != False %}
                                     <input class="btn btn-danger btn-block" type="submit" value="Удалить">
                                 {% else %}
                                     <input class="btn btn-danger btn-block" type="submit" value="Востановить">
