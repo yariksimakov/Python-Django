@@ -6,7 +6,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.shortcuts import render
 
 # Create your views here.
-from admins.forms import UserAdminRegisterForm, UserProfileForm
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
 from geekshop.mixin import CustomDispatchMixin
 from users.models import User
 
@@ -42,7 +42,7 @@ class UserCreateView(CreateView, CustomDispatchMixin):
 class UserUpdateView(UpdateView, CustomDispatchMixin):
     model = User
     template_name = 'admins/admin-users-update-delete.html'
-    form_class = UserProfileForm
+    form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admins_user')
 
     def get_context_data(self, *args, object_list=None, **kwargs):

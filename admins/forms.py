@@ -13,7 +13,7 @@ class UserAdminRegisterForm(UserRegisterForm):
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'image')
 
     def __init__(self, *args, **kwargs):
-        super(UserRegisterForm, self).__init__(*args, **kwargs)
+        super(UserAdminRegisterForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if field_name == 'image':
                 field.widget.attrs['class'] = 'form-control'
@@ -25,6 +25,6 @@ class UserAdminRegisterForm(UserRegisterForm):
 class UserAdminProfileForm(UserProfileForm):
 
     def __init__(self, *args, **kwargs):
-        super(UserProfileForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['readonly'] = False
         self.fields['email'].widget.attrs['readonly'] = False
