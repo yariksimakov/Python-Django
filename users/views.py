@@ -76,7 +76,7 @@ class RegisterListView(FormView, BaseClassContextMixin):
 #     return render(request, 'users/register.html', content)
 
 
-class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
+class ProfileFormView(UpdateView, UserDispatchMixin):
     model = User
     template_name = 'users/profile.html'
     form_class = UserProfileForm
