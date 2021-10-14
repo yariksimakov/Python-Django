@@ -13,36 +13,46 @@ def index(request):
 
 
 class ProductsListView(ListView):
+
     model = Products
     template_name = 'mainapp/products.html'
     paginate_by = 3
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_queryset(self):
+        if self.kwargs:
+            if 'category_id' in self.kwargs.keys():
+                return Products.objects.filter(category=self.kwargs['category_id'])
+            elif 'discharge' in self.kwargs.keys():
+                return Products.objects.all()
+            else:
+                return Products.objects.all()
+    #
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data(**kwargs)
         context['title'] = "geekshop"
         context['categorys'] = ProductsCategory.objects.all()
-        list_example = Products.objects.filter(
-            category=self.request.GET.get('category_id')) if self.request.GET.get('category_id') != None else Products.objects.all()
-        paginator = Paginator(list_example, self.paginate_by)
-
-        page = self.request.GET.get('page_id')
+        list_exam = self.get_queryset()
+        paginator = Paginator(list_exam, self.paginate_by)
+        page = self.request.GET.get('page')
 
         try:
-            file_exams = paginator.page(page)
+            products_pagintor = paginator.page(page)
 
         except PageNotAnInteger:
-            file_exams = paginator.page(1)
+            products_pagintor = paginator.page(1)
 
         except EmptyPage:
-            file_exams = paginator.page(paginator.num_pages)
+            products_pagintor = paginator.page(paginator.num_pages)
 
-        context['products'] = file_exams
+        context['products'] = products_pagintor
         return context
+
 
 def products(request, category_id=None, page_id=1):
     products = Products.objects.filter(
         category=category_id) if category_id != None else Products.objects.all()
     paginator = Paginator(products, per_page=3)
+
 
     try:
         products_paginator = paginator.page(page_id)

@@ -19,7 +19,7 @@ from .views import products, ProductsListView
 app_name = 'products'
 
 urlpatterns = [
-    path('', ProductsListView.as_view(), name='index'),
-    path('category/<int:category_id>/', ProductsListView.as_view(), name='category'),
-    path('page/<int:page_id>/', ProductsListView.as_view(), name='page')
+    path('', products, name='index'),
+    path('category/<int:category_id>/', products, name='category'),
+    path('page/<int:page_id>/', products, name='page')
 ]
