@@ -19,7 +19,7 @@ class UserLoginForm(AuthenticationForm):
 class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('username', 'email', 'age', 'first_name', 'last_name', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super(UserRegisterForm, self).__init__(*args, **kwargs)
@@ -29,6 +29,7 @@ class UserRegisterForm(UserCreationForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Please entered last_name'
         self.fields['password1'].widget.attrs['placeholder'] = 'Please entered password'
         self.fields['password2'].widget.attrs['placeholder'] = 'Please confirm the password'
+        self.fields['age'].widget.attrs['placeholder'] = 'Please entered your age'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 
@@ -39,7 +40,7 @@ class UserProfileForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'image')
+        fields = ('username', 'email','age', 'first_name', 'last_name', 'image')
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
