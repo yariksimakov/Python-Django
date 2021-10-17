@@ -88,10 +88,10 @@ class ProfileFormView(UpdateView, UserDispatchMixin):
     def get_object(self, queryset=None):
         return get_object_or_404(User, pk=self.request.user.pk)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['baskets'] = Basket.objects.filter(user=self.request.user)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['baskets'] = Basket.objects.filter(user=self.request.user)
+    #     return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST, files=request.FILES, instance=self.get_object())
