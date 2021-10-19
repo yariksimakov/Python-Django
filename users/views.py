@@ -52,6 +52,10 @@ class RegisterListView(FormView, BaseClassContextMixin):
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
+            if User.objects.filter(email=request.POST.email):
+                """ почему request.POST.email не возвращает мне email 
+                 регистрирующегося пользователя что бы я его сверил с уже существующими ?"""
+                raise ValueError('Такой email уже есть')
             user = form.save()
             if send_verify_link(user):
                 messages.success(request, 'You have successfully registered')
@@ -152,7 +156,8 @@ def verify(request, email, activation_key):
             user.is_active = True
             user.save()
             user.login(request, user)
-            return render(request, 'users/verification.html')
+        # return HttpResponseRedirect(request, 'users/verification.html')
+        return render(request, 'users/verification.html')
     except Exception as err:
         print(err)
         return HttpResponseRedirect(reverse('index'))

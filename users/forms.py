@@ -37,12 +37,13 @@ class UserRegisterForm(UserCreationForm):
             field.widget.attrs['class'] = 'form-control py-4'
 
     def save(self, commit=True):
-        user = super(UserRegisterForm, self).save()
-        if User.objects.get(email=user.email):
-            raise ValueError('Такой email уже есть')
 
+        user = super(UserRegisterForm, self).save()
+        # if User.objects.filter(email=user.email):
+        # Это работало бы, но как  понял email регис-гося. поль уже сохранен в базе к этому моменту
+        #     raise ValueError('Такой email уже есть')
         user.is_active = False
-        salt = hashlib.sha1(self.username.encode('utf8')).hexdigest()[:6]
+        salt = hashlib.sha1(user.username.encode('utf8')).hexdigest()[:6]
         user.activation_key = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
         user.save()
         return user
