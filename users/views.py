@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.views import LogoutView, LoginView
 from django.core.mail import send_mail
 from django.shortcuts import render, HttpResponseRedirect, redirect, get_object_or_404
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
 
@@ -52,10 +52,6 @@ class RegisterListView(FormView, BaseClassContextMixin):
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
-            if User.objects.filter(email=request.POST.email):
-                """ почему request.POST.email не возвращает мне email 
-                 регистрирующегося пользователя что бы я его сверил с уже существующими ?"""
-                raise ValueError('Такой email уже есть')
             user = form.save()
             if send_verify_link(user):
                 messages.success(request, 'You have successfully registered')
@@ -151,12 +147,11 @@ def verify(request, email, activation_key):
     try:
         user = User.objects.get(email=email)
         if user and user.activation_key == activation_key and not user.is_activation_key_expired():
-            user.activation_key = ''
+            user.activation_key = activation_key
             user.activation_key_created = None
             user.is_active = True
             user.save()
-            user.login(request, user)
-        # return HttpResponseRedirect(request, 'users/verification.html')
+            auth.login(request, user)
         return render(request, 'users/verification.html')
     except Exception as err:
         print(err)
