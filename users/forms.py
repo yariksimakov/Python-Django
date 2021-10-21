@@ -1,5 +1,4 @@
 import hashlib
-import random
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
@@ -39,11 +38,10 @@ class UserRegisterForm(UserCreationForm):
     def clean(self):
         cleaned_data = super().clean()
         if User.objects.filter(email=cleaned_data.get('email')).exists():
-            self.fields.add_error('email', 'Такая почта уже есть')
+            raise ValueError('You entered on email already exists')
         return cleaned_data
 
     def save(self, commit=True):
-
         user = super(UserRegisterForm, self).save()
         user.is_active = False
         salt = hashlib.sha1(user.username.encode('utf8')).hexdigest()[:6]

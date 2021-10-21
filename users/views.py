@@ -51,12 +51,16 @@ class RegisterListView(FormView, BaseClassContextMixin):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            if send_verify_link(user):
-                messages.success(request, 'You have successfully registered')
+        try:
+            if form.is_valid():
+                user = form.save()
+                if send_verify_link(user):
+                    messages.success(request, 'You have successfully registered')
+                return redirect(self.success_url)
             return redirect(self.success_url)
-        return redirect(self.success_url)
+        except Exception as err:
+            messages.error(request, err)
+            return redirect('users:register')
 
 
 # def register(request):
