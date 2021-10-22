@@ -71,3 +71,18 @@ class UserProfileForm(UserChangeForm):
     #     if data.size > 1024 * 1024:
     #         raise ValueError('The file is too large')
     #     return data
+
+
+class UserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = UserProfileForm
+        fields = ('tagline', 'about', 'gender',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileEditForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            if field_name != 'gender':
+                field.widget['class'] = 'form-control py-4'
+            else:
+                field.widget['class'] = 'form-control'
