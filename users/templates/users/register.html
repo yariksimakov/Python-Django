@@ -3,10 +3,18 @@
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-lg-7">
-            {% if form.errors %}
+            {% if form.errors or messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert"
              style="margin-top: 50px;">
-                {{ form.errors|escape }}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% else %}
+                    {% for error in form.non_field_errors %}
+                        {{ error}}
+                    {% endfor %}
+                {% endif %}
 {#            <strong>Holy guacamole!</strong> You should check in on some of those fields below.#}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -43,6 +51,10 @@
                                     электронной
                                     почты</label>
                                 {{ form.email }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
+                                {{ form.age}}
                             </div>
                         </div>
                         <div class="form-row">

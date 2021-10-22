@@ -3,3 +3,4 @@ db.sqlite3
 pycache
 media
 geekshop/__init__.py
+.env
