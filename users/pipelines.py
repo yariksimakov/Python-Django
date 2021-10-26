@@ -36,6 +36,16 @@ def save_user_profile(backend, user, response, *args, **kwargs):
     bdate = datetime.strptime(data['bdate'], '%d.%m.%Y').date()
     age = timezone.now().date().year - bdate.year
 
+    if response['user_photo']:
+        photo_response = response['user_photo']
+        photo_request = requests.get(photo_response)
+        path_photo_pk = f'users_image/{user.pk}.jpg'
+        with open(f'media/{path_photo_pk}', 'wb') as user_photo:
+            user_photo.write(photo_request.content)
+        user.image = path_photo_pk
+
+
+
     user.age = age
     if age < 18:
         user.delete()
