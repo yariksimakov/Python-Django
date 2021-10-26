@@ -43,8 +43,12 @@ class Order(models.Model):
         pass
 
     def delete(self, using=None, keep_parents=False):
-        """ done of me"""
-        pass
+        for element in self.orders.sellect_related():
+            element.product.quantity += element.quantity
+            element.save()
+        self.is_active = False
+        self.save()
+
 
 
 class OrderItems(models.Model):
