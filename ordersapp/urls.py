@@ -8,6 +8,6 @@ urlpatterns = [
     path('create/', OrderCreate.as_view(), name='create'),
     path('delete/<int:pk>/', OrderDelete.as_view(), name='delete'),
     path('update/<int:pk>/', OrderUpdate.as_view(), name='update'),
-    path('reade/<int:pk>/', OrderDetail.as_view(), name='reade'),
+    path('reade/<int:pk>/', OrderDetail.as_view(), name='read'),
     path('forming_complete/<int:pk>/', order_complete, name='forming_complete'),
 ]

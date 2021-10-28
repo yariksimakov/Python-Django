@@ -31,30 +31,29 @@ class Order(models.Model):
     def __str__(self):
         return f'текущий закказ {self.pk}'
 
-    def return_total_quantity(self):
-        receiver = self.orders.select_related()
+    def get_total_quantity(self):
+        receiver = self.orderitems.select_related()
         return sum(list(map(lambda param: param.quantity(), receiver)))
 
-    def return_total_cost(self):
-        receiver = self.orders.select_related()
-        return sum(list(map(lambda element: element.return_product_cost(), receiver)))
+    def get_total_cost(self):
+        receiver = self.orderitems.select_related()
+        return sum(list(map(lambda element: element.get_product_cost(), receiver)))
 
     def get_items(self):
         pass
 
     def delete(self, using=None, keep_parents=False):
-        for element in self.orders.sellect_related():
+        for element in self.orderitems.sellect_related():
             element.product.quantity += element.quantity
             element.save()
         self.is_active = False
         self.save()
 
 
-
 class OrderItems(models.Model):
-    order = models.ForeignKey(Order, verbose_name='заказ', related_name='orders', on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, verbose_name='заказ', related_name='orderitems', on_delete=models.CASCADE)
     product = models.ForeignKey(Products, verbose_name='продукты', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='колличество', default=0)
 
-    def return_product_cost(self):
+    def get_product_cost(self):
         return self.product.price * self.quantity
