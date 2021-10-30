@@ -33,7 +33,7 @@ class Order(models.Model):
 
     def get_total_quantity(self):
         receiver = self.orderitems.select_related()
-        return sum(list(map(lambda param: param.quantity(), receiver)))
+        return sum(list(map(lambda param: param.quantity, receiver)))
 
     def get_total_cost(self):
         receiver = self.orderitems.select_related()
